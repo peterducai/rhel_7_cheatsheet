@@ -65,8 +65,23 @@ ssh-add ~/.ssh/id_rsa
 
 # SELINUX
 
-```
+The restorecon command is part of the policycoreutil package, and semanage is part of
+the policycoreutil-python package.
 
+The **restorecon command is the preferred method** for changing the SELinux context of a file or
+directory. **Unlike chcon**, the context is not explicitly specified when using this command. It uses
+rules in the SELinux policy to determine what the context of the file should be.
+
+For existing files
+```
+semanage fcontext -l
+restorecon -Rv /var/www/
+```
+and for new folders/files
+```
+semanage fcontext -a -t httpd_sys_content_t '/custom(/.*)?'
+restorecon -Rv /custom
+```
 
 # Postgres
 
