@@ -10,6 +10,18 @@ subscription-manager repos --enable rhel-7-server-extras-rpms
 yum group install "Development Tools" --setopt=group_package_types=mandatory,default,optional
 ```
 
+# Users and groups
+
+## useradd
+
+## usermod
+
+```
+usermod --lock/-L or --unlock/-U
+usermod --append/-a --groups/-G second_group --comment/-c
+```
+
+
 # SSH
 
 ```
