@@ -74,8 +74,20 @@ rules in the SELinux policy to determine what the context of the file should be.
 
 For existing files
 ```
-semanage fcontext -l
-restorecon -Rv /var/www/
+cp /tmp/file2 /var/www/html/
+[root@serverX ~]# ls -Z /var/www/html/file*
+-rw-r--r--. root root unconfined_u:object_r:user_tmp_t:s0 /var/www/html/file1
+-rw-r--r--. root root unconfined_u:object_r:httpd_sys_content_t:s0 /var/www/
+html/file2
+[root@serverX ~]# semanage fcontext -l
+... 
+/var/www(/.*)? all files  system_u:object_r:httpd_sys_content_t:s0  
+[root@serverX ~]# semanage fcontext -l
+...
+/var/www(/.*)?  all files  system_u:object_r:httpd_sys_content_t:s0
+...
+[root@serverX ~]# restorecon -Rv /var/www/
+restorecon reset /var/www/html/file1 context
 ```
 and for new folders/files
 ```
