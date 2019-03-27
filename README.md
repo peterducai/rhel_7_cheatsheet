@@ -23,6 +23,7 @@ When a user is removed with userdel without the -r option specified, the system 
 ```
 usermod --lock/-L or --unlock/-U
 usermod --append/-a --groups/-G second_group --comment/-c
+usermod -s /sbin/nologin student
 ```
 
 ## chage
@@ -42,6 +43,13 @@ sudo groupmod -g 6000 ateam
 sudo groupdel ateam
 ```
 
+# File permissions
+
+**chmod**
+* Who is u, g, o, a (for user, group, other, all)
+* What is +, -, = (for add, remove, set exactly)
+* Which is r, w, x (for read, write, execute)
+* OR numeric is sum of r=4, w=2, and x=1.
 
 # SSH
 
@@ -49,6 +57,16 @@ sudo groupdel ateam
 ssh-keygen -t rsa -b 4192 -C "comment"
 ssh-copy-id -i ~/.ssh/id_rsa.pub root@serverX.example.com
 ```
+
+```
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_rsa
+```
+
+# SELINUX
+
+```
+
 
 # Postgres
 
