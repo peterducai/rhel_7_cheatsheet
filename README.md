@@ -5,7 +5,8 @@ all commands executed using sudo are logged by default to **/var/log/secure**
 # YUM
 
 ```
-subscription-manager repos --disable "*" --enable rhel-7-server-optional-rpms
+subscription-manager repos --disable '*' --enable=rhel-7-server-rpms
+subscription-manager repos --enable rhel-7-server-optional-rpms
 subscription-manager repos --enable rhel-7-server-extras-rpms
 yum group install "Development Tools" --setopt=group_package_types=mandatory,default,optional
 ```
@@ -128,6 +129,10 @@ tail /var/log/audit/audit.log
 ausearch -m AVC,USER_AVC -ts recent
 journalctl -t setroubleshoot --since=14:20
 ```
+
+## MLS
+
+> semanage login --modify --range s2:c100 john
 
 # Postgres
 
