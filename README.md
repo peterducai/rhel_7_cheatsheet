@@ -1,0 +1,26 @@
+# YUM
+
+```
+subscription-manager repos --disable "*" --enable rhel-7-server-optional-rpms
+subscription-manager repos --enable rhel-7-server-extras-rpms
+yum group install "Development Tools" --setopt=group_package_types=mandatory,default,optional
+```
+
+# Postgres
+
+## Official postgres way
+
+```
+yum install https://download.postgresql.org/pub/repos/yum/11/redhat/rhel-7-x86_64/pgdg-redhat11-11-2.noarch.rpm
+yum install postgresql11
+```
+
+## Final steps
+
+replace 10 with 11
+
+```
+/usr/pgsql-10/bin/postgresql-10-setup initdb
+systemctl enable postgresql-10
+systemctl start postgresql-10
+```
