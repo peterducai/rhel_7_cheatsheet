@@ -113,6 +113,13 @@ to remove port
 
 > semanage port -d -t http_port_t -p tcp 8001
 
+## Set domain permissive
+
+```
+semanage permissive -a httpd_t
+semanage permissive -d httpd_t
+```
+
 ## Troubleshoot
 
 Is logging running?
