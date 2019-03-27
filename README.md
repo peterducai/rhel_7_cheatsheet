@@ -1,9 +1,20 @@
+# SUDO
+
+all commands executed using sudo are logged by default to **/var/log/secure**
+
 # YUM
 
 ```
 subscription-manager repos --disable "*" --enable rhel-7-server-optional-rpms
 subscription-manager repos --enable rhel-7-server-extras-rpms
 yum group install "Development Tools" --setopt=group_package_types=mandatory,default,optional
+```
+
+# SSH
+
+```
+ssh-keygen -t rsa -b 4192 -C "comment"
+ssh-copy-id -i ~/.ssh/id_rsa.pub root@serverX.example.com
 ```
 
 # Postgres
