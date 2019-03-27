@@ -14,11 +14,22 @@ yum group install "Development Tools" --setopt=group_package_types=mandatory,def
 
 ## useradd
 
+## userdel
+
+When a user is removed with userdel without the -r option specified, the system will have files that are owned by an unassigned user ID number.
+
 ## usermod
 
 ```
 usermod --lock/-L or --unlock/-U
 usermod --append/-a --groups/-G second_group --comment/-c
+```
+
+## Groups
+```
+sudo groupadd -g 5000 ateam
+sudo groupmod -g 6000 ateam
+sudo groupdel ateam
 ```
 
 
