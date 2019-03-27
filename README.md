@@ -25,6 +25,16 @@ usermod --lock/-L or --unlock/-U
 usermod --append/-a --groups/-G second_group --comment/-c
 ```
 
+## chage
+
+![chagedate](pic/chagedates.png)
+```
+chage -m 0 -M 90 -W 7 -I 14 username
+chage -d 0 username will force a password update on next login.
+chage -l username will list a username's current settings.
+chage -E YYYY-MM-DD username will expire an account on a specific day.
+```
+
 ## Groups
 ```
 sudo groupadd -g 5000 ateam
