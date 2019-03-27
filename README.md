@@ -72,6 +72,8 @@ The **restorecon command is the preferred method** for changing the SELinux cont
 directory. **Unlike chcon**, the context is not explicitly specified when using this command. It uses
 rules in the SELinux policy to determine what the context of the file should be.
 
+**In most cases, running restorecon will correct the issue.**
+
 For existing files
 ```
 cp /tmp/file2 /var/www/html/
@@ -93,6 +95,38 @@ and for new folders/files
 ```
 semanage fcontext -a -t httpd_sys_content_t '/custom(/.*)?'
 restorecon -Rv /custom
+```
+
+## Ports
+
+```
+# semanage port -l | grep -w http_port_t
+http_port_t                    tcp      80, 81, 443, 488, 8008, 8009, 8443, 9000
+```
+
+to open port
+
+> semanage port -a -t http_port_t -p tcp 8001
+
+to remove port
+
+> semanage port -d -t http_port_t -p tcp 8001
+
+## Troubleshoot
+
+Is logging running?
+
+```
+systemctl enable auditd.service
+systemctl enable rsyslog.service
+```
+
+When SELinux denies an action, an Access Vector Cache (AVC) message is logged to the /var/log/audit/audit.log
+
+```
+tail /var/log/audit/audit.log
+ausearch -m AVC,USER_AVC -ts recent
+journalctl -t setroubleshoot --since=14:20
 ```
 
 # Postgres
