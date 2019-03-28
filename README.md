@@ -261,6 +261,21 @@ and change it to static
 nmcli con mod static-eth0 ipv4.addresses "192.0.2.2/24 192.0.2.254" ipv4.method "manual"
 ```
 
+for **ipv6**
+
+> nmcli con add con-name eno2 type ethernet ifname eno2 \
+> ip6 2001:db8:0:1::c000:207/64 gw6 2001:db8:0:1::1 ip4 192.0.2.7/24 gw4 192.0.2.1
+
+and DNS
+
+> nmcli con mod static-eth0 +ipv6.dns 2001:4860:4860::8888
+
+```
+Remember that the file /etc/sysconfig/network-scripts/ifcfg-name can be directly
+edited, and that nmcli con reload must be run after saving so that NetworkManager reads
+the configuration changes.
+```
+
 # Hostname
 
 > hostnamectl set-hostname demo.example.com
