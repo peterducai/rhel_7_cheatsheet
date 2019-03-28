@@ -342,7 +342,7 @@ host -v -t AAAA a.root-servers.net      #ipv6
 
 # HTTPD
 
-> yum instal httpd
+> sudo yum -y install httpd httpd-manual
 
 and see **/etc/httpd/conf/httpd.conf**
 
@@ -352,6 +352,33 @@ and see **/etc/httpd/conf/httpd.conf**
 [root@serverX ~]# firewall-cmd --permanent --add-service=http --add-service=https
 [root@serverX ~]# firewall-cmd --reload
 ```
+
+to see allowed ports
+
+> semanage port -l | grep '^http_'
+
+change context of new created DocumentRoot
+
+> semanage fcontext -a -t httpd_sys_content_t '/new/location(/.*)?'
+
+Allowing write access to a DocumentRoot
+
+```
+[root@serverX ~]# setfacl -R -m g:webmasters:rwX /var/www/html
+[root@serverX ~]# setfacl -R -m d:g:webmasters:rwx /var/www/html
+```
+or for new folder
+```
+[root@serverX ~]# mkdir -p -m 2775 /new/docroot
+[root@serverX ~]# chgrp webmasters /new/docroot
+```
+
+## TLS
+
+> [student@serverX ~]$ sudo yum install httpd mod_ssl
+
+> [root@serverX ~]# genkey <FQDN>
+
 
 # Database
 
