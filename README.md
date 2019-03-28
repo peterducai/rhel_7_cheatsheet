@@ -342,6 +342,17 @@ host -v -t AAAA a.root-servers.net      #ipv6
 
 # HTTPD
 
+> yum instal httpd
+
+and see **/etc/httpd/conf/httpd.conf**
+
+```
+[root@serverX ~]# systemctl enable httpd.service
+[root@serverX ~]# systemctl start httpd.service
+[root@serverX ~]# firewall-cmd --permanent --add-service=http --add-service=https
+[root@serverX ~]# firewall-cmd --reload
+```
+
 # Database
 
 ## MariaDB
