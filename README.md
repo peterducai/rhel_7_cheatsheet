@@ -68,7 +68,7 @@ ssh-add ~/.ssh/id_rsa
 
 > journalctl --since "2015-06-26 23:15:00" --until "2015-06-26 23:20:00"
 
-> journalctl --since "2015-06-26 23:15:00" --until "2015-06-26 23:20:00"
+> journalctl --since "2 days ago"
 
 by unit
 
