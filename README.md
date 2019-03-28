@@ -64,6 +64,20 @@ eval "$(ssh-agent -s)"
 ssh-add ~/.ssh/id_rsa
 ```
 
+# Logging
+
+> journalctl --since "2015-06-26 23:15:00" --until "2015-06-26 23:20:00"
+
+> journalctl --since "2015-06-26 23:15:00" --until "2015-06-26 23:20:00"
+
+by unit
+
+> journalctl -u mysql.service -u sshd.service
+
+follow new messages (combined with -u)
+
+> journalctl -u mysql.service -f
+
 # SELINUX
 
 The restorecon command is part of the policycoreutil package, and semanage is part of
