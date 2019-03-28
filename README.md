@@ -286,11 +286,11 @@ the configuration changes.
 
 |Zone name| Default configuration                                                           |
 |---------|---------------------------------------------------------------------------------|
-|internal |Reject incoming traffic unless related to outgoing traffic or matching the ssh, mdns, ipp-client, samba-client, or dhcpv6-client predefined services (same as the home zone to start with). |
-|work |Reject incoming traffic unless related to outgoing traffic or matching the ssh, ipp-client, or dhcpv6-client predefined services. |
-|public |Reject incoming traffic unless related to outgoing traffic or matching the ssh or dhcpv6-client predefined services. The default zone for newly added network interfaces.|
-|external |Reject incoming traffic unless related to outgoing traffic or matching the ssh predefined service. Outgoing IPv4 traffic forwarded through this zone is masqueraded to look like it originated from the IPv4 address of the outgoing network interface.|
-|dmz |Reject incoming traffic unless related to outgoing traffic or matching the ssh predefined service.|
+|internal |Reject incoming traffic unless related to outgoing traffic or matching the **ssh, mdns, ipp-client, samba-client, or dhcpv6-client** predefined services (same as the home zone to start with). |
+|work |Reject incoming traffic unless related to outgoing traffic or matching the **ssh, ipp-client, or dhcpv6-client** predefined services. |
+|public |Reject incoming traffic unless related to outgoing traffic or matching the **ssh or dhcpv6-client** predefined services. *The default zone for newly added network interfaces.*|
+|external |Reject incoming traffic unless related to outgoing traffic or matching the **ssh** predefined service. Outgoing IPv4 traffic forwarded through this zone is masqueraded to look like it originated from the IPv4 address of the outgoing network interface.|
+|dmz |Reject incoming traffic unless related to outgoing traffic or matching the **ssh** predefined service.|
 |block |Reject all incoming traffic unless related to outgoing traffic.|
 |drop |Drop all incoming traffic unless related to outgoing traffic (do not even respond with ICMP errors).|
 
