@@ -141,6 +141,132 @@ journalctl -t setroubleshoot --since=14:20
 
 > semanage login --modify --range s2:c100 john
 
+# NETWORK
+
+## IP
+
+## NMCLI
+
+```
+nmcli dev status
+DEVICE      TYPE      STATE        CONNECTION 
+enp0s31f6   ethernet  connected    enp0s31f6  
+virbr0      bridge    connected    virbr0     
+vnet0       tun       connected    vnet0      
+vnet2       tun       connected    vnet2      
+enp11s0u1   ethernet  unavailable  --         
+wlp61s0     wifi      unavailable  --         
+lo          loopback  unmanaged    --         
+virbr0-nic  tun       unmanaged    -- 
+```
+
+```
+nmcli con show
+NAME                UUID                                  TYPE      DEVICE    
+enp0s31f6           9e1f6a3d-bea7-36c8-a0a6-dcd686f9962d  ethernet  enp0s31f6 
+virbr0              0839d104-c666-4c7a-a36c-7bf5531f5039  bridge    virbr0    
+vnet0               cfce338d-d2c8-4b51-9078-77f5e2cb7627  tun       vnet0     
+vnet2               72ed9153-fe0e-40c5-9d32-0a246233c080  tun       vnet2     
+Amsterdam (AMS2)    7b487c5c-09c9-4c4c-95b0-e562c4a5ad43  vpn       --     
+```
+
+**add connection**
+
+DHCP
+
+```
+nmcli con add con-name eno2 type ethernet ifname eno2
+```
+> where configuration will be saved in /etc/sysconfig/network-scripts/ifcfg-eno2 because the con-name is eno2
+
+or STATIC
+
+```
+nmcli con add con-name eno2 type ethernet ifname eno2 ip4 192.168.0.5/24 gw4 192.168.0.254
+```
+
+**activate or disable connection**
+
+> nmcli con up static-eth0
+
+> nmcli dev dis eth0
+
+**check out details**
+
+```
+nmcli con show enp0s31f6
+connection.id:                          enp0s31f6
+connection.uuid:                        9e1f6a3d-bea7-36c8-a0a6-dcd686f9962d
+connection.stable-id:                   --
+connection.type:                        802-3-ethernet
+connection.interface-name:              enp0s31f6
+connection.autoconnect:                 yes
+connection.autoconnect-priority:        -999
+connection.autoconnect-retries:         -1 (default)
+connection.auth-retries:                -1
+connection.timestamp:                   1553763614
+connection.read-only:                   no
+connection.permissions:                 --
+connection.zone:                        --
+connection.master:                      --
+connection.slave-type:                  --
+connection.autoconnect-slaves:          -1 (default)
+connection.secondaries:                 --
+connection.gateway-ping-timeout:        0
+connection.metered:                     unknown
+connection.lldp:                        default
+connection.mdns:                        -1 (default)
+802-3-ethernet.port:                    --
+802-3-ethernet.speed:                   0
+802-3-ethernet.duplex:                  --
+802-3-ethernet.auto-negotiate:          no
+802-3-ethernet.mac-address:             --
+802-3-ethernet.cloned-mac-address:      --
+802-3-ethernet.generate-mac-address-mask:--
+802-3-ethernet.mac-address-blacklist:   --
+802-3-ethernet.mtu:                     auto
+802-3-ethernet.s390-subchannels:        --
+802-3-ethernet.s390-nettype:            --
+802-3-ethernet.s390-options:            --
+802-3-ethernet.wake-on-lan:             default
+802-3-ethernet.wake-on-lan-password:    --
+ipv4.method:                            auto
+ipv4.dns:                               --
+ipv4.dns-search:                        --
+ipv4.dns-options:                       ""
+ipv4.dns-priority:                      0
+ipv4.addresses:                         --
+ipv4.gateway:                           --
+ipv4.routes:                            --
+ipv4.route-metric:                      -1
+ipv4.route-table:                       0 (unspec)
+ipv4.ignore-auto-routes:                no
+ipv4.ignore-auto-dns:                   no
+ipv4.dhcp-client-id:                    --
+ipv4.dhcp-timeout:                      0 (default)
+ipv4.dhcp-send-hostname:                yes
+ipv4.dhcp-hostname:                     --
+ipv4.dhcp-fqdn:                         --
+ipv4.never-default:                     no
+ipv4.may-fail:                          yes
+ipv4.dad-timeout:                       -1 (default)
+ipv6.method:                            auto
+ipv6.dns:                               --
+ipv6.dns-search:                        --
+```
+
+and change it to static
+
+```
+nmcli con mod static-eth0 ipv4.addresses "192.0.2.2/24 192.0.2.254" ipv4.method "manual"
+```
+
+# Hostname
+
+> hostnamectl set-hostname demo.example.com
+
+
+
 # Postgres
 
 ## Official postgres way
