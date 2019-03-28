@@ -294,6 +294,19 @@ the configuration changes.
 |block |Reject all incoming traffic unless related to outgoing traffic.|
 |drop |Drop all incoming traffic unless related to outgoing traffic (do not even respond with ICMP errors).|
 
+## Masquerade
+
+```
+$ sudo firewall-cmd --zone=public --add-masquerade
+$ sudo firewall-cmd --zone=public --add-forward-port=port=443:proto=tcp:toport=443:toaddr=192.168.2.42 --permanent
+```
+
+and 
+
+```
+$ sudo firewall-cmd --zone=public --remove-masquerade
+$ firewall-cmd --zone=public --remove-forward-port=port=443:proto=tcp:toport=443:toaddr=192.168.2.42 --permanent
+```
 
 ## Rich rules
 
@@ -304,16 +317,45 @@ the configuration changes.
 [root@serverX ~]# firewall-cmd --direct --permanent --add-rule ipv4 raw blacklist 1 -j DROP
 ```
 
-# Postgres
+TODO: check
+> firewall-cmd --add-rich-rule='rule family=ipv4 source address=10.20.0.0/16 port port=1234 protocol=tcp log prefix="MyTagHere " level=info accept'
 
-## Official postgres way
+To verify new rules, run:
+
+> $ sudo firewall-cmd --list-rich-rules --permanent
+
+> firewall-cmd --permanent --direct --add-rule ipv4 mangle OUTPUT 0 -d 10.1.2.3/32 -j DSCP --set-dscp-class AF21
+
+# DNS
+
+> nslookup should be obsolete
+
+The **host or dig** commands can be used to manually look up DNS names.
+
+```
+host -v -t A aroot-servers.net          #ipv4
+host -v -t AAAA a.root-servers.net      #ipv6
+```
+
+# SMTP
+
+
+# HTTPD
+
+# Database
+
+## MariaDB
+
+## Postgres
+
+### Official postgres way
 
 ```
 yum install https://download.postgresql.org/pub/repos/yum/11/redhat/rhel-7-x86_64/pgdg-redhat11-11-2.noarch.rpm
 yum install postgresql11
 ```
 
-## Final steps
+### Final steps
 
 replace 10 with 11
 
