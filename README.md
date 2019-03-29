@@ -351,6 +351,44 @@ host -v -t A aroot-servers.net          #ipv4
 host -v -t AAAA a.root-servers.net      #ipv6
 ```
 
+# Time and NTP
+
+## Time
+
+```
+timedatectl
+systemctl restart systemd-timedated.service
+timedatectl set-time HH:MM:SS
+timedatectl set-time YYYY-MM-DD
+timedatectl list-timezones | grep Europe
+timedatectl set-timezone Europe/Prague
+```
+
+## NTP
+
+
+options in /etc/ntp.conf
+
+example: 
+
+> restrict 192.168.1.0 mask 255.255.255.0 nomodify notrap
+
+```
+ignore — All packets will be ignored, including ntpq and ntpdc queries.
+kod — a “Kiss-o'-death” packet is to be sent to reduce unwanted queries.
+limited — do not respond to time service requests if the packet violates the rate limit default values or those specified by the discard command. ntpq and ntpdc queries are not affected. For more information on the discard command and the default values, see Section 18.17.2, “Configure Rate Limiting Access to an NTP Service”.
+lowpriotrap — traps set by matching hosts to be low priority.
+nomodify — prevents any changes to the configuration.
+noquery — prevents ntpq and ntpdc queries, but not time queries, from being answered.
+nopeer — prevents a peer association being formed.
+noserve — deny all packets except ntpq and ntpdc queries.
+notrap — prevents ntpdc control message protocol traps.
+notrust — deny packets that are not cryptographically authenticated.
+ntpport — modify the match algorithm to only apply the restriction if the source port is the standard NTP UDP port 123.
+version — deny packets that do not match the current NTP version.
+```
+
+
 # SMTP
 
 
