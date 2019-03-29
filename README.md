@@ -362,10 +362,48 @@ timedatectl set-time HH:MM:SS
 timedatectl set-time YYYY-MM-DD
 timedatectl list-timezones | grep Europe
 timedatectl set-timezone Europe/Prague
+date +"%Y-%m-%d %H:%M"
+date --set YYYY-MM-DD
+date --set HH:MM:SS --utc
+hwclock --set --date "21 Oct 2016 21:17" --utc
+hwclock --systohc  OR  --hctosys
 ```
+
+> To avoid problems with time zone and DST switching, it is recommended to keep the hardware clock in UTC.
 
 ## NTP
 
+**chrony** should be prefered NTP for your system
+
+> firewall-cmd --permanent --zone=public --add-port=123/udp
+
+**driftfile** is name of the file where it can find and store the clock drift, also known as frequency error, of the system clock.
+
+### chronyd
+
+options in /etc/chrony.conf
+
+> allow 192.0.2.0/24  # to allow only specific host/subnet/ipv6-host
+
+> deny 192.1.2.0/24
+
+> driftfile /myfile
+
+> logdir /var/log/chrony
+
+> local stratum 10
+
+A large value of 10 indicates that the clock is so many hops away from a reference clock that its time is unreliable. If the computer ever has access to another computer which is ultimately synchronized to a reference clock, it will almost certainly be at a stratum less than 10. Therefore, the choice of a high value like 10 for the local command prevents the machine’s own time from ever being confused with real time, were it ever to leak out to clients that have visibility of real servers.
+
+> log measurements statistics tracking
+
+> makestep 1000 10
+
+Normally chronyd will cause the system to gradually correct any time offset, by slowing down or speeding up the clock as required. In certain situations, the system clock may be so far adrift that this slewing process would take a very long time to correct the system clock. This directive forces chronyd to step system clock if the adjustment is larger than a threshold value, but only if there were no more clock updates since chronyd was started than a specified limit (a negative value can be used to disable the limit). This is particularly useful when using reference clock, because the initstepslew directive only works with NTP sources. This would step the system clock if the adjustment is larger than 1000 seconds, but only in the first ten clock updates.
+
+TODO cleanup
+
+### ntpd
 
 options in /etc/ntp.conf
 
