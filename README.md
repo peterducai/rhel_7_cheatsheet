@@ -11,6 +11,12 @@ subscription-manager repos --enable rhel-7-server-extras-rpms
 yum group install "Development Tools" --setopt=group_package_types=mandatory,default,optional
 ```
 
+# Locale
+
+> localectl list-keymaps
+
+> localectl set-keymap map
+
 # Users and groups
 
 ## useradd
