@@ -2,6 +2,13 @@
 
 Access a shell prompt and issue commands with correct syntax
 Use input-output redirection (>, >>, |, 2>, etc.)
+
+> command 2>&1 1>file 
+
+does not do the same as 
+
+> command 1>file 2>&1
+
 Use grep and regular expressions to analyze text
 Access remote systems using ssh
 Log in and switch users in multiuser targets
@@ -26,15 +33,47 @@ Create, delete, copy, and move files and directories
 Create hard and soft links
 List, set, and change standard ugo/rwx permissions
 Locate, read, and use system documentation including man, info, and files in /usr/share/doc
+
+```
+yum install -y selinux-policy-devel
+mandb
+man ps
+whatis ps
+apropos ps   # search for *ps*
+mandb        # update man
+```
+
 Note: Red Hat may use applications during the exam that are not included in Red Hat Enterprise Linux for the purpose of evaluating candidate's abilities to meet this objective.
 
 # Operate running systems
 
 Boot, reboot, and shut down a system normally
 Boot systems into different targets manually
+
 Interrupt the boot process in order to gain access to a system
+
+```
+press e to edit grub config
+on kernel line put.. rd.break enforcing=0
+ctr+x
+
+
 Identify CPU/memory intensive processes, adjust process priority with renice, and kill processes
 Locate and interpret system log files and journals
+
+```
+sudo systemd-analyze  blame
+sudo journalctl -p err
+```
+
+permanent logging
+
+```
+mkdir /var/log/journal   (instead of /run/log/journal)
+echo "SystemMaxUse=50M" >> /etc/systemd/journald.conf
+systemctl restart systemd-journald 
+```
+
 Access a virtual machine's console
 Start and stop virtual machines
 Start, stop, and check the status of network services
@@ -108,10 +147,17 @@ Configure systems to boot into a specific target automatically
 Install Red Hat Enterprise Linux systems as virtual guests
 Configure systems to launch virtual machines at boot
 Configure network services to start automatically at boot
+
+> nmcli con mod static2 connection.autoconnect no
+
+<!-- nmcli con mod static2 connection.permissions user:stella,john -->
+
 Configure a system to use time services
 Install and update software packages from Red Hat Network, a remote repository, or from the local file system
 Update the kernel package appropriately to ensure a bootable system
 Modify the system bootloader
+
+> rd.break enforcing=0
 
 # Manage users and groups
 
