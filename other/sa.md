@@ -50,6 +50,12 @@ Note: Red Hat may use applications during the exam that are not included in Red 
 Boot, reboot, and shut down a system normally
 Boot systems into different targets manually
 
+```
+systemctl get-default
+systemctl list-units --type=target
+systemctl set-default graphical.target
+```
+
 Interrupt the boot process in order to gain access to a system
 
 ```
@@ -130,7 +136,7 @@ useradd user0X; usermod -aG team user0X
 Finally, if you want the team group members to be able to see each other’s files but not to delete them, type:
 
 ```
-# chmod +t /home/shared
+chmod +t /home/shared
 ```
 
 > find all SUID: find / -perm +4000
@@ -175,3 +181,18 @@ List and identify SELinux file and process context
 Restore default file contexts
 Use boolean settings to modify system SELinux settings
 Diagnose and address routine SELinux policy violations
+
+
+
+--------------------------------------------------------------------
+
+! getent passwd <user>         (for ldap/kerberos)
+
+
+realmd discover domain.example.com  #AD
+realmd permit --realm domain.x.com --all/(DOMAIN\\hpe)
+
+realm is alwasy UPPERCASE
+
+
+system-config-authentication

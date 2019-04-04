@@ -1,0 +1,129 @@
+
+groupadd -g 50000 team
+mkdir /home/shared
+chown nobody:team /home/shared
+chmod g+ws,o-rwx /home/shared
+useradd user0X; usermod -aG team user0X
+chmod +t /home/shared  (teamgroup visibility)
+
+semanage fcontext -l
+semanage fcontext -a -t httpd_sys_content_t '/custom(/.*)?'
+restorecon -Rv /var/www/
+semanage port -a -t http_port_t -p tcp 8001
+ausearch -m AVC,USER_AVC -ts recent
+
+systemctl restart systemd-timedated.service
+timedatectl set-time HH:MM:SS
+timedatectl set-time YYYY-MM-DD
+timedatectl set-timezone Europe/Prague
+
+chage -E(xpire) YYYY-MM-DD <username>
+
+localectl set/list-keymaps
+journalctl --since "2 hours ago"
+journalctl -u mysql.service -u sshd.service
+systemctl enable auditd.service
+systemctl enable rsyslog.service
+
+nmcli con up static-eth0
+nmcli dev dis eth0
+
+(dns-utils)
+host -v -t A aroot-servers.net 
+
+
+timedatectl
+systemctl restart systemd-timedated.service
+timedatectl set-time HH:MM:SS
+hwclock --systohc  OR  --hctosys
+
+(chrony)
+firewall-cmd --permanent --zone=public --add-port=123/udp
+
+(httpd mod_ssl)
+systemctl start httpd.service
+firewall-cmd --permanent --add-service=http --add-service=https
+firewall-cmd --reload
+genkey <fqdn>  (tls)
+
+
+
+yum install -y cifs-utils
+yum install -y samba-client
+"//smbserver/shared /mnt cifs rw,username=user01,password=pass 0 0" to /etc/fstab
+OR
+credentials=/root/.credentials  where creds will be stored (and chmod 0600)
+mount -a
+
+
+pvcreate /dev/vda
+vgcreate -s G <vg_name> /dev/vda
+vgextend vg /dev/vdb
+lvcreate --size 1G --name <lv_name> <vg_name>
+lvremove /dev/vg/lv_vol
+
+blkid | grep lv_vol >> /etc/fstab
+
+
+mkswap /dev/vg/lv_swap
+swapon /dev/vg/lv_swap
+
+
+tar (c/x/t)zvf directory.tgz (--selinux)
+tar (c/x/t)jvf directory.bz2 (--selinux)
+
+systemctl set-default graphical.target
+
+
+
+rd.break enforcing=0
+mount -o remount,rw /sysroot
+chroot /sysroot
+passwd root
+restorecon /etc/shadow 
+touch /.autorelabel
+reboot
+
+
+parted or gdisk
+
+
+realmd discover domain.example.com  #AD
+realmd permit --realm domain.x.com --all/(DOMAIN\\hpe)
+getent passwd user
+
+
+
+/dev/cdrom /repo iso9660 loop 0 0
+
+mkdir -p /repos/local
+mount -o loop rhel-server.iso /repos/local
+cd /etc/yum.repos.d
+vim home.repo
+[home]
+name=linux
+baseurl=file:///repos/local
+enabled=1
+gpgchchek=0
+:wq!
+yum clean all
+yum repolist
+yum list all
+
+
+
+yum install -y createrepo
+createrepo /repo
+
+
+virsh list
+virsh start <vm_name>
+virsh destroy
+virsh undefine
+virsh reboot
+
+
+(x delete, m modify, u user, g group)
+setfacl -x u:bob <file>
+setfacl -m u:bob:rw- <file>
+setfacl -R -m g:team:r-x dir
