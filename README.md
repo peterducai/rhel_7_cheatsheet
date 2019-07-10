@@ -53,10 +53,22 @@ sudo groupdel ateam
 # File permissions
 
 **chmod**
+
 * Who is u, g, o, a (for user, group, other, all)
 * What is +, -, = (for add, remove, set exactly)
 * Which is r, w, x (for read, write, execute)
 * OR numeric is sum of r=4, w=2, and x=1.
+
+
+**FACL**
+
+```
+setfacl -b appdir/                 # removes all acl's from directory
+setfacl -m g:testusers:r appdir/   # testusers group to have read access to all files in the appdir
+setfacl -Rm g:testusers:r appdir/  # recursive
+setfacl -m u:testuser1:rwx appdir/ # Set testuser1 to have read, write and execute access to the appuser1 directory
+setfacl -m o::rwx shared           # Set all users to have read, write and execute to the shared directory
+```              
 
 # SSH
 
@@ -72,6 +84,10 @@ ssh-add ~/.ssh/id_rsa
 
 # Logging
 
+> systemctl list-unit-files --all   # list units
+
+> journalctl -l -f
+
 > journalctl --since "2015-06-26 23:15:00" --until "2015-06-26 23:20:00"
 
 > journalctl --since "2 days ago"
@@ -83,6 +99,26 @@ by unit
 follow new messages (combined with -u)
 
 > journalctl -u mysql.service -f
+
+# LVM
+
+* Install lvm2
+* List all the volumes using lsblk
+* create physical volumes
+```
+/sbin/pvcreate <volume from prev list>
+```
+* then to list the volumes use /sbin/lvmdiskscan
+* Create a volume group /sbin/vgcreate <name> /dev/vdb
+* Format the vg 
+```
+/sbin/mkfs.ext4 /dev/mapper/Vol_group
+```
+* change fstab if you want to map this vg to some filesystem
+
+/dev/mapper/vg /var/lib/folder ext4 rw,user 
+
+* mount the volume using mount -a
 
 # SELINUX
 
