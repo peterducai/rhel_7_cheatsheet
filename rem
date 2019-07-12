@@ -127,3 +127,8 @@ virsh reboot
 setfacl -x u:bob <file>
 setfacl -m u:bob:rw- <file>
 setfacl -R -m g:team:r-x dir
+
+
+
+
+find /home/pducai/Downloads/ -type f -size +100000k

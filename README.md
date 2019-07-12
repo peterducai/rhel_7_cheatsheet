@@ -555,6 +555,7 @@ Other special characters can be used:
 - A list of values separated by commas (,) specifies a list.
 - A forward slash (/) can be used to specify step values
 
+5 * * * * will run at five minutes after the top of the hour, every hour (i.e., once an hour). */5 * * * * will run every five minutes (i.e., twelve times an hour) 
 ```
 
 # Automounter
@@ -611,6 +612,15 @@ change context of new created DocumentRoot
 > semanage fcontext -a -t httpd_sys_content_t '/new/location(/.*)?'
 
 Allowing write access to a DocumentRoot
+
+# ACL
+
+```
+(x delete, m modify, u user, g group)
+setfacl -x u:bob <file>
+setfacl -m u:bob:rw- <file>
+setfacl -R -m g:team:r-x dir
+```
 
 ```
 [root@serverX ~]# setfacl -R -m g:webmasters:rwX /var/www/html
