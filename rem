@@ -104,7 +104,7 @@ vim home.repo
 name=linux
 baseurl=file:///repos/local
 enabled=1
-gpgchchek=0
+gpgcheck=0
 :wq!
 yum clean all
 yum repolist

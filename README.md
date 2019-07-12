@@ -2,6 +2,28 @@
 
 all commands executed using sudo are logged by default to **/var/log/secure**
 
+# Boot
+
+At the beginning of the boot process, at the GRUB 2 menu, type the e key to edit.
+
+Then, go to the kernel line (the line starting with linux16) and add the following statements at the end:
+
+> rd.break enforcing=0
+
+Press Ctrl x to resume the boot process.
+
+Then, mount the /sysroot partition as read/write:
+
+> mount –o remount,rw /sysroot
+
+Execute the chroot command on the /sysroot partition:
+
+> chroot /sysroot
+
+Change the root password:
+
+> passwd root
+
 # YUM
 
 ```
@@ -11,11 +33,49 @@ subscription-manager repos --enable rhel-7-server-extras-rpms
 yum group install "Development Tools" --setopt=group_package_types=mandatory,default,optional
 ```
 
+# Install
+
+* Create mount point and mount the DVD
+
+<!-- > mkdir /mnt/rhel-dvd && mount -t iso9660 -o ro /dev/cdrom /mnt/rhel-dvd
+
+* Create RHEL repo list and call it ‘rhel-dvd.repo’
+
+$ touch /etc/yum.repos.d/rhel-dvd.repo && chmod 644 /etc/yum.repos.d/rhel-dvd.repo -->
+
+```
+# mount -o loop RHEL7.1.iso /mnt
+# cp /mnt/media.repo /etc/yum.repos.d/rhel7dvd.repo
+# chmod 644 /etc/yum.repos.d/rhel7dvd.repo
+```
+
+<!-- * Add the following config to ‘rhel-dvd.repo’
+
+```
+[rhel-dvd]
+name=Red Hat Enterprise Linux $releasever - $basearch - DVD
+baseurl=file:///mnt/rhel-dvd/
+enabled=1
+gpgcheck=0
+``` -->
+
+* Clean your cache
+
+$ yum clean all && subscription-manager clean
+
 # Locale
 
 > localectl list-keymaps
 
 > localectl set-keymap map
+
+# Compress
+
+```
+tar -czvf app.tar.gz app
+tar -cjvf app.tar.bz2 app
+zip -r app.zip app
+```
 
 # Users and groups
 
@@ -119,6 +179,56 @@ follow new messages (combined with -u)
 /dev/mapper/vg /var/lib/folder ext4 rw,user 
 
 * mount the volume using mount -a
+
+
+
+```
+# pvcreate /dev/sda1 /dev/sdb1 /dev/sdc1
+  Physical volume "/dev/sda1" successfully created
+  Physical volume "/dev/sdb1" successfully created
+  Physical volume "/dev/sdc1" successfully created
+
+# vgcreate new_vol_group /dev/sda1 /dev/sdb1 /dev/sdc1
+  Volume group "new_vol_group" successfully created
+
+# vgs
+  VG            #PV #LV #SN Attr   VSize  VFree
+  new_vol_group   3   0   0 wz--n- 51.45G 51.45G
+
+# lvcreate -L 2G -n new_logical_volume new_vol_group
+  Logical volume "new_logical_volume" created
+
+# mkfs.gfs2 -p lock_nolock -j 1 /dev/new_vol_group/new_logical_volume
+This will destroy any data on /dev/new_vol_group/new_logical_volume.
+
+Are you sure you want to proceed? [y/n] y
+
+# mount /dev/new_vol_group/new_logical_volume /mnt
+# df
+Filesystem           1K-blocks      Used Available Use% Mounted on
+/dev/new_vol_group/new_logical_volume
+1965840        20   1965820   1% /mnt
+```
+
+## Resize
+
+```
+e2fxck -fy /dev/somepath   # check
+resize2fs /dev/somepath 4G # resize to 4G
+lvreduce -L 5G /dev/vg/disk-name
+resize2fs /dev/somepath
+mount /dev/somepath /mnt
+```
+
+OR
+
+```
+lvresize –size 5G –resizefs /path/to/device
+```
+
+# SWAP
+
+> sudo swapon --show  # should show swaps
 
 # SELINUX
 
@@ -257,52 +367,7 @@ connection.stable-id:                   --
 connection.type:                        802-3-ethernet
 connection.interface-name:              enp0s31f6
 connection.autoconnect:                 yes
-connection.autoconnect-priority:        -999
-connection.autoconnect-retries:         -1 (default)
-connection.auth-retries:                -1
-connection.timestamp:                   1553763614
-connection.read-only:                   no
-connection.permissions:                 --
-connection.zone:                        --
-connection.master:                      --
-connection.slave-type:                  --
-connection.autoconnect-slaves:          -1 (default)
-connection.secondaries:                 --
-connection.gateway-ping-timeout:        0
-connection.metered:                     unknown
-connection.lldp:                        default
-connection.mdns:                        -1 (default)
-802-3-ethernet.port:                    --
-802-3-ethernet.speed:                   0
-802-3-ethernet.duplex:                  --
-802-3-ethernet.auto-negotiate:          no
-802-3-ethernet.mac-address:             --
-802-3-ethernet.cloned-mac-address:      --
-802-3-ethernet.generate-mac-address-mask:--
-802-3-ethernet.mac-address-blacklist:   --
-802-3-ethernet.mtu:                     auto
-802-3-ethernet.s390-subchannels:        --
-802-3-ethernet.s390-nettype:            --
-802-3-ethernet.s390-options:            --
-802-3-ethernet.wake-on-lan:             default
-802-3-ethernet.wake-on-lan-password:    --
-ipv4.method:                            auto
-ipv4.dns:                               --
-ipv4.dns-search:                        --
-ipv4.dns-options:                       ""
-ipv4.dns-priority:                      0
-ipv4.addresses:                         --
-ipv4.gateway:                           --
-ipv4.routes:                            --
-ipv4.route-metric:                      -1
-ipv4.route-table:                       0 (unspec)
-ipv4.ignore-auto-routes:                no
-ipv4.ignore-auto-dns:                   no
-ipv4.dhcp-client-id:                    --
-ipv4.dhcp-timeout:                      0 (default)
-ipv4.dhcp-send-hostname:                yes
-ipv4.dhcp-hostname:                     --
-ipv4.dhcp-fqdn:                         --
+...
 ipv4.never-default:                     no
 ipv4.may-fail:                          yes
 ipv4.dad-timeout:                       -1 (default)
@@ -468,6 +533,49 @@ ntpport — modify the match algorithm to only apply the restriction if the sour
 version — deny packets that do not match the current NTP version.
 ```
 
+# CRON
+
+> crontab -e
+
+```
+ # For details see man 4 crontabs
+
+# Example of job definition:
+# .---------------- minute (0 - 59)
+# |  .------------- hour (0 - 23)
+# |  |  .---------- day of month (1 - 31)
+# |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...
+# |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+# |  |  |  |  |
+# *  *  *  *  * user-name  command to be executed
+
+Other special characters can be used:
+- An asterisk (*) can be used to specify all valid values.
+- A hyphen (-) between integers specifies a range of integers.
+- A list of values separated by commas (,) specifies a list.
+- A forward slash (/) can be used to specify step values
+
+```
+
+# Automounter
+
+> yum install -y autofs nfs-utils
+
+Create a new indirect /etc/auto.guests map and paste the following line:
+
+> * -rw,nfs4 instructor.example.com:/home/guests/&
+
+Add the following line at the beginning of the /etc/auto.master file:
+
+> /home/guests /etc/auto.guests
+
+Start the Automounter daemon and enable it at boot:
+
+Test the configuration:
+
+> su - ldapuser02
+
+# systemctl enable autofs && systemctl start autofs
 
 # SMTP
 
