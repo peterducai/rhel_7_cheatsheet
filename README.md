@@ -575,7 +575,16 @@ Test the configuration:
 
 > su - ldapuser02
 
-# systemctl enable autofs && systemctl start autofs
+> systemctl enable autofs && systemctl start autofs
+
+
+# NFS
+
+sudo mount -o hard,nolock usa-node01:/mapr /mapr
+
+# SAMBA
+
+mount.cifs //myserverhere.com/cifs_share /mnt/cifs_share -o user,uid=65001,rw,workgroup=DEV,credentials=/root/.cifs
 
 # SMTP
 
