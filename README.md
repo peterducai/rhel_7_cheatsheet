@@ -221,7 +221,7 @@ mount /dev/somepath /mnt
 ```
 
 OR
-
+ 
 ```
 lvresize –size 5G –resizefs /path/to/device
 ```
@@ -582,6 +582,24 @@ Test the configuration:
 # NFS
 
 sudo mount -o hard,nolock usa-node01:/mapr /mapr
+
+
+
+
+
+1. mkdir -p /<some dirname here>/<isodomain name here>
+
+2. chmod 755 /<some dirname here>
+
+3. chmod 750 /<some dirname here>/<isodomain name here>
+
+4. chown -r 36:36 /<some dirname here>/<isodomain name here>
+
+5. vim /etc/exports append this...
+
+  /<some dirname here>/<isodomain name here>                 *(rw,sync,all_squash)
+
+6. /etc/init.d/nfs restart
 
 # SAMBA
 
